@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const groups = [
+  { kind: '팀', title: 'Team Projects', style: 'team', description: '팀과 함께 설계하고 검증한 프로젝트' },
+  { kind: '개인', title: 'Personal Projects', style: 'personal', description: '직접 구현하고 실습한 프로젝트' },
+  { kind: '연구', title: 'Research Projects', style: 'research', description: '보안 문제를 탐구하는 연구 프로젝트' },
+] as const;
+---
+<Base title="Projects | 박현석">
+  <div class="projects-page">
+    <section class="wrap page projects-content">
+      <header class="projects-intro">
+        <p class="eyebrow">PROJECTS</p>
+        <h1>Projects</h1>
+        <p>웹 애플리케이션과 Kubernetes 실습, 팀 연구 프로젝트를 정리했습니다.</p>
+      </header>
+
+      <div class="projects-groups">
+        {groups.map(group => {
+          const entries = projects.filter(project => project.data.kind === group.kind);
+          return entries.length > 0 && (
+            <section class:list={['project-group', `group-${group.style}`]} aria-labelledby={`${group.style}-heading`}>
+              <div class="group-heading">
+                <div>
+                  <h2 id={`${group.style}-heading`}>{group.title}</h2>
+                  <p>{group.description}</p>
+                </div>
+                <span class="group-count">{entries.length}개</span>
+              </div>
+              <div class="project-grid">{entries.map(project => <ProjectCard project={project} />)}</div>
+            </section>
+          );
+        })}
+      </div>
+
+      <div class="related-band"><div><strong>MCP Tool Composition Security</strong><p>다중 도구 조합과 실행 통제에 관한 팀 연구</p></div><a class="text-link" href="/research/">Research 보기</a></div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .projects-page {
+    background: var(--page-background);
+  }
+  .projects-content { padding-block: 68px 85px; }
+  .projects-intro { max-width: 760px; margin-bottom: 44px; }
+  .projects-intro h1 { font-size: clamp(2.6rem, 4.2vw, 3.65rem); font-weight: 700; line-height: 1.25; letter-spacing: -.045em; margin-bottom: 1rem; }
+  .projects-intro > p:last-child { color: var(--secondary-text); font-size: 1.0625rem; line-height: 1.8; margin: 0; word-break: keep-all; }
+  .projects-groups { display: grid; gap: 48px; }
+  .project-group { --group-accent: var(--project-team); --group-border: var(--project-team-border); }
+  .group-personal { --group-accent: var(--project-personal); --group-border: var(--project-personal-border); }
+  .group-research { --group-accent: var(--project-research); --group-border: var(--project-research-border); }
+  .group-heading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; padding-bottom: 1rem; margin-bottom: 1.15rem; border-bottom: 1px solid var(--border); }
+  .group-heading h2 { color: var(--group-accent); font-size: 1.4rem; font-weight: 700; margin: 0 0 .25rem; }
+  .group-heading p { color: var(--secondary-text); font-size: .9rem; margin: 0; }
+  .group-count { color: var(--secondary-text); font-size: .8125rem; white-space: nowrap; }
+  .project-group :global(.project-card) { padding: 1.4rem; border-color: var(--group-border); }
+  .project-group :global(.project-card:hover) { border-color: var(--group-accent); }
+  .project-group :global(.project-kind) { color: var(--group-accent); }
+  .project-group :global(.project-card h3 a:hover) { color: var(--group-accent); }
+  .project-group :global(.project-highlights) { margin-bottom: 1.1rem; }
+  .related-band { margin-top: 48px; }
+  @media (max-width: 560px) {
+    .projects-content { padding-block: 45px 65px; }
+    .projects-intro { margin-bottom: 36px; }
+    .projects-intro h1 { font-size: 2.6rem; }
+    .projects-intro > p:last-child { font-size: 1rem; }
+    .projects-groups { gap: 38px; }
+    .group-heading h2 { font-size: 1.25rem; }
+    .project-group :global(.project-card) { padding: 1.2rem; }
+    .related-band { margin-top: 38px; }
+  }
+</style>

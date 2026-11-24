@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Research | 박현석" description="MCP 도구 조합의 위험 경로와 실행 통제를 살펴보는 팀 연구">
+  <div class="project-detail-page project-category-research">
+    <article class="wrap project-detail">
+      <a class="detail-back" href="/projects/mcp-tool-composition/">MCP 프로젝트 보기</a>
+      <header class="project-detail-header">
+        <p class="detail-category">Research <span>/</span> 진행 중</p>
+        <h1>MCP 도구 조합 보안</h1>
+        <p class="detail-lead">여러 MCP 도구가 연결될 때의 위험 경로와 실행 통제를 살펴보는 팀 연구입니다.</p>
+      </header>
+      <div class="project-detail-layout">
+        <div class="prose project-body">
+          <h2>연구 소개</h2>
+          <p>개별 도구는 허용된 기능을 제공하더라도, 여러 도구의 입력과 출력이 이어지면 새로운 위험 경로가 생길 수 있습니다. 이 연구는 다중 MCP 도구 조합의 위험 경로를 분석하고 실행 통제를 평가하는 것을 목표로 합니다.</p>
+          <h2>연구 방법</h2>
+          <p>공개 자료에는 세부 방법의 실행 여부가 아직 명시되지 않았습니다. 다음은 연구에서 검토할 수 있는 접근 방식입니다.</p>
+          <ul>
+            <li><strong>도구와 조합 분석:</strong> 도구별 기능과 입력·출력의 연결을 살펴봅니다.</li>
+            <li><strong>위험 후보와 실행:</strong> 정적 분석으로 식별할 수 있는 후보와 실제 도구 호출 결과를 비교하는 방법을 검토합니다.</li>
+            <li><strong>정책과 통제:</strong> 도구 조합의 실행 흐름에 정책을 적용하고 그 결과를 평가하는 방법을 검토합니다.</li>
+          </ul>
+          <h2>주요 확인 내용</h2>
+          <p>도구를 따로 볼 때와 조합해 볼 때의 위험을 구분하고, 분석상 후보가 실제 실행에서 어떻게 나타나는지 확인하는 것이 주요 질문입니다. 구체적인 검증 결과와 비교 내용은 아직 공개되지 않았습니다.</p>
+          <h2>관련 링크</h2>
+          <ul>
+            <li><a href="/projects/mcp-tool-composition/">MCP 프로젝트 상세</a></li>
+            <li><a href="https://github.com/shyunseok1029/shyunseok1029" target="_blank" rel="noopener noreferrer">공개 GitHub 프로필<span class="sr-only"> (새 창)</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </article>
+  </div>
+</Base>

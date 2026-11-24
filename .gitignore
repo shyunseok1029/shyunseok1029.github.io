@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+
+# Local artifacts and private sample drafts
+*.log
+*.tmp
+*.temp
+.DS_Store
+src/content/blog/example.md
+src/content/writeups/example.md

@@ -1,0 +1,45 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  return (await getCollection('projects')).map(project => ({ params: { id: project.id }, props: { project } }));
+}
+const { project } = Astro.props;
+const p = project.data;
+const { Content } = await render(project);
+// The glob loader already renders trusted local Markdown. Keep its original order
+// and fall back to Astro's renderer if the section or image handling needs it.
+const html = project.rendered?.html ?? '';
+const resultStart = html.search(/<h2\b[^>]*\bid="결과-및-검증"/);
+const splitContent = resultStart >= 0 && !project.rendered?.metadata?.imagePaths?.length;
+const mainHtml = splitContent ? html.slice(0, resultStart) : '';
+const asideHtml = splitContent ? html.slice(resultStart) : '';
+const category = p.kind === '팀' ? 'team' : p.kind === '개인' ? 'personal' : 'research';
+const categoryLabel = p.kind === '팀' ? 'Team Project' : p.kind === '개인' ? 'Personal Project' : 'Research Project';
+---
+<Base title={`${p.title} | Projects`} description={p.description}>
+  <div class:list={['project-detail-page', 'project-page-layout', `project-category-${category}`]}>
+    <article class="wrap project-detail">
+      <a class="detail-back" href="/projects/">프로젝트 목록</a>
+      <header class="project-detail-header">
+        <p class="detail-category">{categoryLabel} <span>/</span> {p.status}</p>
+        <h1>{p.title}</h1>
+        <p class="detail-lead">{p.description}</p>
+        <div class="tags" aria-label="사용 기술">{p.technologies.map((t: string) => <span>{t}</span>)}</div>
+        <div class="detail-summary">
+          <div><span>프로젝트 유형</span><strong>{p.kind} 프로젝트</strong></div>
+          <div><span>핵심 분야</span><strong>{p.focus.join(' · ')}</strong></div>
+          <div><span>관련 자료</span><div class="summary-links">{p.github && <a href={p.github} target="_blank" rel="noopener noreferrer">GitHub 저장소<span class="sr-only"> (새 창)</span></a>}{p.source && <a href={p.source} target="_blank" rel="noopener noreferrer">공개 자료<span class="sr-only"> (새 창)</span></a>}{!p.github && !p.source && <strong>공개 자료 정리 중</strong>}</div></div>
+        </div>
+      </header>
+      {p.image && <img class="project-image" src={p.image} alt={`${p.title} 프로젝트 이미지`}/>}
+      <div class:list={['project-detail-layout', { 'project-detail-columns': splitContent }]}>
+        {splitContent ? <>
+          <div class="prose project-body" set:html={mainHtml} />
+          <aside class="prose project-body project-body--cards" aria-label="결과 및 관련 자료" set:html={asideHtml} />
+        </> : <div class="prose project-body project-body--cards"><Content /></div>}
+      </div>
+    </article>
+  </div>
+</Base>

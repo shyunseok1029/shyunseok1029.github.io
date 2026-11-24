@@ -1,0 +1,10 @@
+---
+import '../styles/global.css';
+const { title = '박현석 | Security Portfolio', description = '웹 보안과 모의해킹을 공부하는 박현석의 프로젝트와 기록' } = Astro.props;
+const links = [['Home','/'],['Projects','/projects/'],['Blog','/blog/'],['About','/about/']];
+const isCurrent = (url: string) => url === '/' ? Astro.url.pathname === '/' : Astro.url.pathname.startsWith(url) || (url === '/projects/' && Astro.url.pathname.startsWith('/research/')) || (url === '/blog/' && Astro.url.pathname.startsWith('/writeups/'));
+---
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="description" content={description}/><meta name="theme-color" content="#0b1217"/><title>{title}</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"/>{Astro.site && <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)}/>}</head>
+<body><a class="skip" href="#main">본문으로 건너뛰기</a><header class="header"><div class="wrap nav"><a class="brand" href="/" aria-label="Hyunseok Park 홈"><span class="brand-mark" aria-hidden="true">HP</span><span class="brand-text"><span>HYUNSEOK PARK</span><small>/ SECURITY JOURNAL</small></span></a><nav aria-label="주 메뉴"><ul>{links.map(([name,url]) => <li><a href={url} aria-current={isCurrent(url) ? 'page' : undefined}>{name}</a></li>)}</ul></nav><a class="nav-github" href="https://github.com/shyunseok1029" target="_blank" rel="noopener noreferrer">GitHub<span class="sr-only"> (새 창)</span></a></div></header><main id="main"><slot/></main>
+<footer><div class="wrap footer-inner"><div><strong>HYUNSEOK PARK</strong><p>WEB SECURITY · INFRASTRUCTURE · CLOUD</p></div><nav class="footer-right" aria-label="추가 메뉴"><a href="/research/">Research</a><a href="/writeups/">Write-ups</a><a href="https://github.com/shyunseok1029" target="_blank" rel="noopener noreferrer">GitHub<span class="sr-only"> (새 창)</span></a></nav></div><div class="wrap footer-bottom">© {new Date().getFullYear()} Hyunseok Park</div></footer></body></html>
